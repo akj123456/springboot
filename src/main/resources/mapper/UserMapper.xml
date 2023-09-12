@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.learning.springboot.mapper.UserMapper">
+
+    <select id="getInfo" parameterType="String" resultType="com.learning.springboot.bean.UserBean">
+        SELECT * FROM userInfo WHERE phone = #{phone} AND userPassword = #{userPassword}
+    </select>
+    <select id="getList" resultType="com.learning.springboot.bean.UserBean">
+        SELECT * FROM userInfo
+    </select>
+    <insert id="newUser">
+        INSERT INTO userInfo(id,name,phone,userPassword,creattime)VALUES(#{id},#{name},#{phone},#{userPassword},#{creattime})
+    </insert>
+    <delete id="deleteUser" parameterType="com.learning.springboot.bean.UserBean">
+        delete from userInfo where id=#{id}
+    </delete>
+    <select id="getUserpageList" resultType="com.learning.springboot.bean.UserBean" >
+        SELECT * FROM `userinfo` where 1=1
+        <if test="ew.phone != null and ew.phone !=''">
+            and `phone` LIKE CONCAT('%',#{ew.phone},'%')
+        </if>
+        <if test="ew.name != null and ew.name !=''">
+            and name LIKE CONCAT('%',#{ew.name},'%')
+        </if>
+        <if test="ew.id != null and ew.id !=''">
+            and id  LIKE CONCAT('%',#{ew.id},'%')
+        </if>
+    </select>
+    <select id="scorePagelist" resultType="com.learning.springboot.bean.UserBean" >
+        SELECT
+        u.id,
+        u.`name`,
+        s.`subject`,
+        s.score
+        FROM
+        score s
+        LEFT JOIN userinfo u ON s.userid = u.id  where 1=1
+        <if test="ew.phone != null and ew.phone !=''">
+            and u.`phone` LIKE CONCAT('%',#{ew.phone},'%')
+        </if>
+        <if test="ew.name != null and ew.name !=''">
+            and u.name LIKE CONCAT('%',#{ew.name},'%')
+        </if>
+        <if test="ew.id != null and ew.id !=''">
+            and u.id  LIKE CONCAT('%',#{ew.id},'%')
+        </if>
+    </select>
+</mapper>
